@@ -5,6 +5,23 @@
 {% block content %}
     <div class="container">
       <h1>CutIt Page</h1>
-      
+      <form action="#" method="POST" class="mt-5">
+        <div class="mb-3">
+          <label for="link" class="form-label">Link to Cut</label>
+          <input type="text" class="form-control" id="link" name="link">
+        </div>
+        <label for="basic-url" class="form-label">Your vanity URL</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="short_link_addon">{{ request.root_url }}{{ usrid }}/</span>
+          <input type="text" class="form-control" id="short_link" aria-describedby="short_link_addon" name="short_link">
+        </div>
+        <button type="submit" class="btn btn-primary">Cut It!</button>
+      </form>
+      {% if cutted %}
+      <div class="col-md-6 offset-md-3">
+        <p class="col-md-6 offset-md-3">{{ cutted.short_link }}</p>
+        <img src="data:image/jpeg;base64,{{ cutted.qrcode }}" alt="qrcode"/>
+      </div>
+      {% endif %}
     </div>
 {% endblock %}
