@@ -25,8 +25,6 @@ class User(db.Model):
     def __init__(self, email, password):
         self.email = email
         self.password = password
-    
-
 
 
 class Link(db.Model):
@@ -72,7 +70,7 @@ def login():
 def logout():
     flash("You have been logged out!", "info")
     session.pop("authusr", None)
-    return(redirect(url_for("login")))
+    return redirect(url_for("login"))
 
 
 @app.route("/register", methods=["POST", "GET"])
@@ -108,30 +106,38 @@ def contact():
 def cutit():
     if "authusr" in session:
         db_usr = db.session.query(User).filter_by(email=session['authusr']).first()
+        db_links = [tmp_link for tmp_link in db_usr.links]
         if request.method == "POST":
-            link = request.form['link']
-            short_link = request.form['short_link']
-            full_short_link = str(request.root_url + str(db_usr.id) + '/' +short_link)
-            qr = create_qr(full_short_link)
-            if db.session.query(Link).filter_by(owner=db_usr.id, short_link=short_link).first():
+            form_link = request.form['link']
+            form_short_link = request.form['short_link']
+            print(form_short_link in [link.short_link for link in db_links])
+            if form_short_link in [link.short_link for link in db_links]:
                 flash("You have already created same short link!", "error")
-            if db.session.query(Link).filter_by(owner=db_usr.id, link=link).first():
-                render_template("cutit.html", cutted={"qrcode": qr_to_base64(qr), "short_link": full_short_link})
-            link_obj = Link(
-                link = link,
-                short_link = short_link,
-                owner = db_usr.id
-            )
-            db.session.add(link_obj)
-            db.session.commit()
-            return render_template("cutit.html", cutted={"qrcode": qr_to_base64(qr), "short_link": full_short_link})
+                return render_template("cutit.html", usrid=db_usr.id)
+            elif form_link in [tmp_link.link for tmp_link in db_links]:
+                flash("This link was cutted last time")
+                link_obj = [tmp_link for tmp_link in db_links if tmp_link.link == form_link][0]
+                full_short_link = str(request.root_url + str(db_usr.id) + '/' + link_obj.short_link)
+                qr = create_qr(full_short_link)
+                return render_template("cutit.html", usrid=db_usr.id, cutted={"qrcode": qr_to_base64(qr), "short_link": full_short_link})
+            else:
+                full_short_link = str(request.root_url + str(db_usr.id) + '/' + form_short_link)
+                qr = create_qr(full_short_link)
+                link_obj = Link(
+                    link = form_link,
+                    short_link = form_short_link,
+                    owner = db_usr.id
+                )
+                db.session.add(link_obj)
+                db.session.commit()
+                return render_template("cutit.html", usrid=db_usr.id, cutted={"qrcode": qr_to_base64(qr), "short_link": full_short_link})
         else:
             return render_template("cutit.html", usrid=db_usr.id)
     else:
         return redirect(url_for("login"))
     
-# TODO: DELETING LINKS
-@app.route("/mylinks", methods=["GET", "DELETE"])
+
+@app.route("/mylinks")
 def mylinks():
     if "authusr" in session:
         db_usr = db.session.query(User).filter_by(email=session['authusr']).first()
@@ -139,11 +145,35 @@ def mylinks():
         return render_template("mylinks.html", links=links)
     else:
         return redirect(url_for("login"))
+    
 
-# TODO: REDIRECTING VIA LINKS
-@app.route("/<int:owner>/<str:short_link>")
-def redirect():
-    pass
+@app.route("/mylinks/delete/<int:id>")
+def delete_link(id):
+    if "authusr" in session:
+        db_usr = db.session.query(User).filter_by(email=session['authusr']).first()
+        link = [link for link in db_usr.links if link.id==id][0]
+        if link.owner == db_usr.id:
+            db.session.delete(link)
+            db.session.commit()
+            flash("Link succesfully deleted!")
+            return redirect(url_for("mylinks"))
+        else:
+            flash("This is not your link!", "error")
+            return redirect(url_for("mylinks"))
+    else:
+        return redirect(url_for("login"))
+
+
+@app.route("/<int:owner>/<short_link>")
+def redirecting(owner, short_link):
+    db_usr = db.session.query(User).filter_by(id=owner).first()
+    links = [link for link in db_usr.links]
+    if short_link in [link.short_link for link in links]:
+        link = [x.link for x in links if short_link == x.short_link][0]
+        return redirect(link)
+    else:
+        return redirect(url_for("home"))
+
 
     
 if __name__ == "__main__":

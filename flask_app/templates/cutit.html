@@ -3,6 +3,17 @@
     Lincut cutit page
 {% endblock %}
 {% block content %}
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
     <div class="container">
       <h1>CutIt Page</h1>
       <form action="#" method="POST" class="mt-5">

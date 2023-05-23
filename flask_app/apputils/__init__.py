@@ -18,4 +18,3 @@ def qr_to_base64(qr):
     buffered = BytesIO()
     qr.save(buffered)
     return base64.b64encode(buffered.getvalue()).decode('utf-8')
-
