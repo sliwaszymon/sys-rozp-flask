@@ -17,10 +17,39 @@
               <tr>
                 <td>{{ link.link }}</td>
                 <td><a href="{{ url_for('redirecting', owner=link.owner, short_link=link.short_link) }}">{{ request.root_url }}{{ link.owner }}/{{ link.short_link }}</a></td>
-                <td><a href="{{ url_for('delete_link', id=link.id) }}">Delete</a></td>
+                <td><a class="btn btn-primary" href="{{ url_for('delete_link', id=link.id) }}">Delete</a><a class="btn btn-primary" style="margin-left: 2px;" data-bs-toggle="modal" href="#ModalToggle_{{ link.short_link }}" role="button">Show QR</a></td>
               </tr>
             {% endfor %}
             </tbody>
           </table>
     </div>
+
+    {% for link in links %}
+    <div class="modal fade" id="ModalToggle_{{ link.short_link }}" aria-labelledby="ModalToggleLabel_{{ link.short_link }}" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ModalToggleLabel_{{ link.short_link }}">QR Code</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mt-5" style="width: 100%; display: flex;align-items: center; justify-content: center;">
+              <div class="card" style="width: 25vw;">
+                <img src="data:image/jpeg;base64,{{ link.qrcode }}" class="card-img-top" alt="qrcode">
+                <div class="card-body">
+                  <h5 class="card-title">{{ link.full_short_link }}</h5>
+                  <p class="card-text">Redirect using link, QR or button below.</p>
+                  <a href="{{ link.full_short_link }}" class="btn btn-primary">Redirect</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  {% endfor %}
+
 {% endblock %}
+
+

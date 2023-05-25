@@ -141,7 +141,7 @@ def cutit():
 def mylinks():
     if "authusr" in session:
         db_usr = db.session.query(User).filter_by(email=session['authusr']).first()
-        links = [{"id": link.id, "link": link.link, "short_link": link.short_link, "owner": link.owner} for link in db_usr.links]
+        links = [{"id": link.id, "link": link.link, "short_link": link.short_link, "owner": link.owner, "full_short_link": str(request.root_url + str(db_usr.id) + '/' + link.short_link), "qrcode": qr_to_base64(create_qr(str(request.root_url + str(db_usr.id) + '/' + link.short_link)))} for link in db_usr.links]
         return render_template("mylinks.html", links=links)
     else:
         return redirect(url_for("login"))
