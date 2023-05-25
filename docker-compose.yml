@@ -1,0 +1,28 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: flaskapp
+      MYSQL_USER: dbusr
+      MYSQL_PASSWORD: passwd
+    ports:
+      - 3306:3306
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+volumes:
+  db_data:
