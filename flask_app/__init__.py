@@ -55,7 +55,7 @@ def login():
             if hashlib.md5(password.encode()).hexdigest() == db_user.password:
                 session.permanent = True
                 session["authusr"] = email
-                flash("Login succesfull!")
+                flash("Login succesfull!", "success")
                 return redirect(url_for("cutit"))
             else:
                 flash("Wrong password!", "error")
@@ -92,6 +92,7 @@ def register():
             )
             db.session.add(user)
             db.session.commit()
+            flash("User created succesfully", "success")
             return redirect(url_for("login"))
     else:
         return render_template("register.html")
@@ -110,16 +111,15 @@ def cutit():
         if request.method == "POST":
             form_link = request.form['link']
             form_short_link = request.form['short_link']
-            print(form_short_link in [link.short_link for link in db_links])
-            if form_short_link in [link.short_link for link in db_links]:
-                flash("You have already created same short link!", "error")
-                return render_template("cutit.html", usrid=db_usr.id)
-            elif form_link in [tmp_link.link for tmp_link in db_links]:
-                flash("This link was cutted last time")
+            if form_link in [tmp_link.link for tmp_link in db_links]:
+                flash("This link was cutted last time", "info")
                 link_obj = [tmp_link for tmp_link in db_links if tmp_link.link == form_link][0]
                 full_short_link = str(request.root_url + str(db_usr.id) + '/' + link_obj.short_link)
                 qr = create_qr(full_short_link)
                 return render_template("cutit.html", usrid=db_usr.id, cutted={"qrcode": qr_to_base64(qr), "short_link": full_short_link})
+            elif form_short_link in [link.short_link for link in db_links]:
+                    flash("You have already created same short link!", "error")
+                    return render_template("cutit.html", usrid=db_usr.id)
             else:
                 full_short_link = str(request.root_url + str(db_usr.id) + '/' + form_short_link)
                 qr = create_qr(full_short_link)
@@ -155,7 +155,7 @@ def delete_link(id):
         if link.owner == db_usr.id:
             db.session.delete(link)
             db.session.commit()
-            flash("Link succesfully deleted!")
+            flash("Link succesfully deleted!", "info")
             return redirect(url_for("mylinks"))
         else:
             flash("This is not your link!", "error")

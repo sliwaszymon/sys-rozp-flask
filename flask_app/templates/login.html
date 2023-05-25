@@ -1,20 +1,9 @@
 {% extends "base.html" %}
 {% block title %}
-    Lincut login page
+    Lincut - LOGIN
 {% endblock %}
 {% block content %}
-
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
-    <div class="container">
+    <div class="container bg-light rounded-2 p-3" style="min-height: 90vh;">
       <h1>Login Page</h1>
       <form action="#" method="POST" class="mt-5">
           <div class="mb-3">

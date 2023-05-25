@@ -79,7 +79,7 @@ class Link(db.Model):
 
 Zostały stworzone przy użyciu klasy ``SQLAlchemy`` z pakietu ``flask_sqlalchemy``. Jak można zauważyć oba modele są ze sobą powiązane relacją. Każdy Link posiada swojego właściciela, a pobranie Użytkownika z bazy danych poskutkuje również pobraniem wszystkich Linków, które zostały przez niego skrócone i zapisane w bazie danych.
 
-# TU WKLEIĆ SCHEMAT BAZY DANYCH
+![Schemat bazy danych](db_schema.png)
 
 ## 2.3. Rejestracja i autoryzacja
 

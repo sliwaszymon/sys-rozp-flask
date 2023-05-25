@@ -1,20 +1,9 @@
 {% extends "base.html" %}
 {% block title %}
-    Lincut cutit page
+    Lincut - CUT-IT!
 {% endblock %}
 {% block content %}
-
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul class=flashes>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-
-    <div class="container">
+    <div class="container bg-light rounded-2 p-3" style="min-height: 90vh;">
       <h1>CutIt Page</h1>
       <form action="#" method="POST" class="mt-5">
         <div class="mb-3">
@@ -29,10 +18,21 @@
         <button type="submit" class="btn btn-primary">Cut It!</button>
       </form>
       {% if cutted %}
-      <div class="col-md-6 offset-md-3">
+      <div class="mt-5" style="width: 100%; display: flex;align-items: center; justify-content: center;">
+        <div class="card" style="width: 25vw;">
+          <img src="data:image/jpeg;base64,{{ cutted.qrcode }}" class="card-img-top" alt="qrcode">
+          <div class="card-body">
+            <h5 class="card-title">{{ cutted.short_link }}</h5>
+            <p class="card-text">Redirect using link, QR or button below.</p>
+            <a href="{{ cutted.short_link }}" class="btn btn-primary">Redirect</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- <div class="col-md-6 offset-md-3">
         <p class="col-md-6 offset-md-3">{{ cutted.short_link }}</p>
         <img src="data:image/jpeg;base64,{{ cutted.qrcode }}" alt="qrcode"/>
-      </div>
+      </div> -->
       {% endif %}
     </div>
 {% endblock %}
