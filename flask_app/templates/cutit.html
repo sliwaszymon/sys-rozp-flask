@@ -22,9 +22,8 @@
         <div class="card" style="width: 25vw;">
           <img src="data:image/jpeg;base64,{{ cutted.qrcode }}" class="card-img-top" alt="qrcode">
           <div class="card-body">
-            <h5 class="card-title">{{ cutted.short_link }}</h5>
-            <p class="card-text">Redirect using link, QR or button below.</p>
-            <a href="{{ cutted.short_link }}" class="btn btn-primary">Redirect</a>
+            <h5 class="card-title"><a stye="color: white; text-decoration:none;" href="{{ cutted.short_link }}">{{ cutted.short_link }}</a></h5>
+            <p class="card-text">Redirect using link or QR <code></code>.</p>
           </div>
         </div>
       </div>
