@@ -9,7 +9,7 @@ from apputils import create_qr, qr_to_base64
 db = SQLAlchemy()
 app = Flask(__name__)
 app.secret_key = "lincutbysliwaandmartyniuk"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://dbusr:passwd@db:3306/flaskapp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.permanent_session_lifetime = timedelta(minutes=5)
 db.init_app(app)
@@ -18,8 +18,8 @@ db.init_app(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    email = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     links = db.relationship('Link', lazy='select', backref=db.backref('user', lazy='joined'))
 
     def __init__(self, email, password):
@@ -29,8 +29,8 @@ class User(db.Model):
 
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    link = db.Column(db.String, nullable=False)
-    short_link = db.Column(db.String, nullable=False)
+    link = db.Column(db.String(255), nullable=False)
+    short_link = db.Column(db.String(20), nullable=False)
     owner = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __init__(self, link, short_link, owner):
@@ -175,8 +175,10 @@ def redirecting(owner, short_link):
         return redirect(url_for("home"))
 
 
-    
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(host='0.0.0.0')
+
