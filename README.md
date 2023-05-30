@@ -21,6 +21,7 @@
 - [4. Podsumowanie](#4-podsumowanie)
     - [4.1. Osiągnięte cele](#41-osiągnięte-cele)
     - [4.2. Napotkane problemy](#42-napotkane-problemy)
+- [Bibliografia](#bibliografia)
 
 # 1. Wstęp
 
@@ -402,4 +403,4 @@ Zarządzanie skrótami wygląda następująco:
 - [Dokumentacja Flask 2.3.x](https://flask.palletsprojects.com/en/2.3.x/)
 - [Dokumentacja Flask-SQLAlchemy 3.0.x](https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/)
 - [Dokumentacja Bootstrap 5.2.x](https://getbootstrap.com/docs/5.2/getting-started/introduction/)
-
+- [Dokumentacja biblioteki qrcode](https://pypi.org/project/qrcode/)
