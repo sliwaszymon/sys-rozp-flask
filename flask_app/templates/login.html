@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}
+    Lincut - LOGIN
+{% endblock %}
+{% block content %}
+    <div class="container bg-light rounded-2 p-3" style="min-height: 90vh;">
+      <h1>Login</h1>
+      <form action="#" method="POST" class="mt-5">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+          <div class="form-text">Don't have an account yet? <a href="{{ url_for('register') }}">Create one!</a></div>
+        </form>
+    </div>
+{% endblock %}

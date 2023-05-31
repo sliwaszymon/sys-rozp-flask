@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}
+    Lincut - CUT-IT!
+{% endblock %}
+{% block content %}
+    <div class="container bg-light rounded-2 p-3" style="min-height: 90vh;">
+      <h1>Cut It</h1>
+      <form action="#" method="POST" class="mt-5">
+        <div class="mb-3">
+          <label for="link" class="form-label">Link to Cut</label>
+          <input type="text" class="form-control" id="link" name="link">
+        </div>
+        <label for="basic-url" class="form-label">Your vanity URL</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="short_link_addon">{{ request.root_url }}{{ usrid }}/</span>
+          <input type="text" class="form-control" id="short_link" aria-describedby="short_link_addon" name="short_link">
+        </div>
+        <button type="submit" class="btn btn-primary">Cut It!</button>
+      </form>
+      {% if cutted %}
+      <div class="mt-5" style="width: 100%; display: flex;align-items: center; justify-content: center;">
+        <div class="card" style="width: 25vw;">
+          <img src="data:image/jpeg;base64,{{ cutted.qrcode }}" class="card-img-top" alt="qrcode">
+          <div class="card-body">
+            <h5 class="card-title"><a stye="color: white; text-decoration:none;" href="{{ cutted.short_link }}">{{ cutted.short_link }}</a></h5>
+            <p class="card-text">Redirect using link or QR <code></code>.</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+{% endblock %}

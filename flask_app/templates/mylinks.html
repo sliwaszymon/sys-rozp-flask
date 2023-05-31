@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}
+    Lincut - MY LINKS
+{% endblock %}
+{% block content %}
+    <div class="container bg-light rounded-2 p-3" style="min-height: 90vh;">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Link</th>
+                <th scope="col">Short Link</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for link in links %}
+              <tr>
+                <td>{{ link.link }}</td>
+                <td><a href="{{ url_for('redirecting', owner=link.owner, short_link=link.short_link) }}">{{ request.root_url }}{{ link.owner }}/{{ link.short_link }}</a></td>
+                <td><a class="btn btn-primary" href="{{ url_for('delete_link', id=link.id) }}">Delete</a><a class="btn btn-primary" style="margin-left: 2px;" data-bs-toggle="modal" href="#ModalToggle_{{ link.short_link }}" role="button">Show QR</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+    </div>
+
+    {% for link in links %}
+    <div class="modal fade" id="ModalToggle_{{ link.short_link }}" aria-labelledby="ModalToggleLabel_{{ link.short_link }}" tabindex="-1" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ModalToggleLabel_{{ link.short_link }}">QR Code</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mt-5" style="width: 100%; display: flex;align-items: center; justify-content: center;">
+              <div class="card" style="width: 25vw;">
+                <img src="data:image/jpeg;base64,{{ link.qrcode }}" class="card-img-top" alt="qrcode">
+                <div class="card-body">
+                  <h5 class="card-title"><a stye="color: white; text-decoration:none;" href="{{ url_for('redirecting', owner=link.owner, short_link=link.short_link) }}">{{ link.full_short_link }}</a></h5>
+                  <p class="card-text">Redirect using link or QR <code></code>.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  {% endfor %}
+
+{% endblock %}
+
+
